@@ -28,18 +28,19 @@ class MyApp extends StatelessWidget {
         // (Se eliminó la referencia a GoogleFonts.interTextTheme)
         colorScheme:
             ColorScheme.fromSwatch(
-              primarySwatch: MaterialColor(primaryColor.toARGB32(), <int, Color>{
-                50: primaryColor.withValues(alpha: 0.1),
-                100: primaryColor.withValues(alpha: 0.2),
-                200: primaryColor.withValues(alpha: 0.25),
-                300: primaryColor.withValues(alpha: 0.4),
-                400: primaryColor.withValues(alpha: 0.5),
-                500: primaryColor,
-                600: primaryColor.withValues(alpha: 0.6),
-                700: primaryColor.withValues(alpha: 0.7),
-                800: primaryColor.withValues(alpha: 0.8),
-                900: primaryColor.withValues(alpha: 0.9),
-              }),
+              primarySwatch:
+                  MaterialColor(primaryColor.toARGB32(), <int, Color>{
+                    50: primaryColor.withValues(alpha: 0.1),
+                    100: primaryColor.withValues(alpha: 0.2),
+                    200: primaryColor.withValues(alpha: 0.25),
+                    300: primaryColor.withValues(alpha: 0.4),
+                    400: primaryColor.withValues(alpha: 0.5),
+                    500: primaryColor,
+                    600: primaryColor.withValues(alpha: 0.6),
+                    700: primaryColor.withValues(alpha: 0.7),
+                    800: primaryColor.withValues(alpha: 0.8),
+                    900: primaryColor.withValues(alpha: 0.9),
+                  }),
             ).copyWith(
               secondary: accentColor,
               surface: const Color(0xFFF5F5F5), // Fondo suave

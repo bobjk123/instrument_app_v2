@@ -5,6 +5,7 @@ import '../utils/instrumento_tile.dart';
 import '../utils/cart_summary_bar.dart';
 import '../utils/cart_sheet.dart';
 import '../utils/snackbar_helper.dart';
+import '../utils/category_tab.dart';
 
 class MainCatalogScreen extends StatefulWidget {
   const MainCatalogScreen({super.key});
@@ -12,6 +13,8 @@ class MainCatalogScreen extends StatefulWidget {
   @override
   State<MainCatalogScreen> createState() => _MainCatalogScreenState();
 }
+
+// CategoryTab moved to lib/utils/category_tab.dart
 
 class _MainCatalogScreenState extends State<MainCatalogScreen> {
   final List<ArticuloCarrito> _cartItems = [];
@@ -156,13 +159,57 @@ class _MainCatalogScreenState extends State<MainCatalogScreen> {
               onPressed: _logout,
             ),
           ],
-          bottom: TabBar(
-            isScrollable: true,
-            indicatorColor: theme.colorScheme.primary,
-            labelColor: theme.colorScheme.primary,
-            unselectedLabelColor: Colors.grey.shade600,
-            labelStyle: const TextStyle(fontWeight: FontWeight.bold),
-            tabs: categorias.map((cat) => Tab(text: cat)).toList(),
+          // Envolver el TabBar en PreferredSize para asegurar suficiente altura
+          // y evitar errores de "Bottom overflowed" cuando las pestañas tienen
+          // contenido más alto (iconos con borde + texto, accesibilidad, etc.).
+          // Ajustamos la altura del PreferredSize según el textScaleFactor
+          // para mejorar la compatibilidad con accesibilidad extrema.
+          bottom: PreferredSize(
+            preferredSize: Size.fromHeight(
+              (() {
+                const double baseHeight = 72;
+                // ignore: deprecated_member_use
+                final double ts = MediaQuery.of(context).textScaleFactor;
+                // Limitamos el escalado a un máximo razonable para evitar alturas excesivas
+                final double scale = ts.clamp(1.0, 2.0);
+                return baseHeight * scale;
+              })(),
+            ),
+            child: Builder(
+              builder: (context) {
+                final double baseHeight = 72;
+                // ignore: deprecated_member_use
+                final double ts = MediaQuery.of(context).textScaleFactor;
+                final double scale = ts.clamp(1.0, 2.0);
+                final double preferredHeight = baseHeight * scale;
+                return Container(
+                  height: preferredHeight,
+                  alignment: Alignment.centerLeft,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 8,
+                  ),
+                  color: Colors.white,
+                  child: TabBar(
+                    // No scrollable: distribuir las pestañas a lo ancho para
+                    // que la barra ocupe más espacio horizontal (más "larga").
+                    isScrollable: false,
+                    indicatorColor: Colors.transparent,
+                    labelColor: theme.colorScheme.primary,
+                    unselectedLabelColor: Colors.grey.shade600,
+                    labelStyle: const TextStyle(fontWeight: FontWeight.bold),
+                    tabs: categorias
+                        .asMap()
+                        .entries
+                        .map(
+                          (entry) =>
+                              CategoryTab(index: entry.key, label: entry.value),
+                        )
+                        .toList(),
+                  ),
+                );
+              },
+            ),
           ),
         ),
         body: Stack(

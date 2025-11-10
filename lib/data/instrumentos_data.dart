@@ -1,60 +1,54 @@
 import '../models/instrumento.dart';
 
+// Generamos 8 elementos por categoría. Las imágenes representativas están
+// en `lib/assets/` y se usan como `imagenUrl` con la ruta relativa (asset).
 final List<Instrumento> todosInstrumentos = [
-  Instrumento(
-    nombre: 'Guitarra Acústica Clásica',
-    fabricante: 'Yamaha',
-    precio: 299.99,
-    imagenUrl: 'https://placehold.co/100x100/A0C4FF/ffffff?text=Guitarra',
-    detalles:
-        'Ideal para principiantes. Tapa de pícea maciza que proporciona un tono rico y vibrante.',
-    categoria: 'Cuerdas',
-  ),
-  Instrumento(
-    nombre: 'Batería Acústica Fusion',
-    fabricante: 'Tama',
-    precio: 750.00,
-    imagenUrl: 'https://placehold.co/100x100/BDB2FF/ffffff?text=Bateria',
-    detalles:
-        'Configuración de 5 piezas con herrajes de doble brazo. Sonido potente y articulado.',
-    categoria: 'Percusión',
-  ),
-  Instrumento(
-    nombre: 'Teclado Digital P-45',
-    fabricante: 'Yamaha',
-    precio: 450.50,
-    imagenUrl: 'https://placehold.co/100x100/FFC6FF/ffffff?text=Teclado',
-    detalles:
-        '88 teclas contrapesadas con acción Graded Hammer Standard (GHS) para una sensación de piano auténtica.',
-    categoria: 'Teclados',
-  ),
-  Instrumento(
-    nombre: 'Saxofón Alto Estándar',
-    fabricante: 'Selmer',
-    precio: 1200.00,
-    imagenUrl: 'https://placehold.co/100x100/FDFFB6/ffffff?text=Saxofon',
-    detalles:
-        'Acabado en laca dorada. Tono cálido y centrado, excelente para estudiantes intermedios.',
-    categoria: 'Viento',
-  ),
-  Instrumento(
-    nombre: 'Ukelele Soprano',
-    fabricante: 'Kala',
-    precio: 89.99,
-    imagenUrl: 'https://placehold.co/100x100/CAFFBF/ffffff?text=Ukelele',
-    detalles:
-        'Cuerpo de caoba. Sonido brillante y clásico. Incluye funda de transporte.',
-    categoria: 'Cuerdas',
-  ),
-  Instrumento(
-    nombre: 'Platillos Hi-Hat 14"',
-    fabricante: 'Zildjian',
-    precio: 180.00,
-    imagenUrl: 'https://placehold.co/100x100/9BF6FF/ffffff?text=Platillos',
-    detalles:
-        'Serie A Custom. Brillantes y limpios, perfectos para cualquier género.',
-    categoria: 'Percusión',
-  ),
+  // Cuerdas
+  for (var i = 1; i <= 8; i++)
+    Instrumento(
+      nombre: 'Guitarra Modelo $i',
+      fabricante: 'Yamaha',
+      precio: 199.99 + i * 25,
+      imagenUrl: 'lib/assets/cuerda.jpg',
+      detalles:
+          'Guitarra acústica de cuerpo $i con buen sonido y afinación estable.',
+      categoria: 'Cuerdas',
+    ),
+
+  // Teclados
+  for (var i = 1; i <= 8; i++)
+    Instrumento(
+      nombre: 'Teclado Serie $i',
+      fabricante: 'Casio',
+      precio: 299.0 + i * 30,
+      imagenUrl: 'lib/assets/teclado.png',
+      detalles:
+          'Teclado digital con múltiples sonidos y sensibilidad al tacto.',
+      categoria: 'Teclados',
+    ),
+
+  // Percusión
+  for (var i = 1; i <= 8; i++)
+    Instrumento(
+      nombre: 'Set de Percusión $i',
+      fabricante: 'Tama',
+      precio: 499.0 + i * 40,
+      imagenUrl: 'lib/assets/percusion.jpg',
+      detalles:
+          'Set de percusión completo, ideal para práctica y presentaciones.',
+      categoria: 'Percusión',
+    ),
+
+  // Viento
+  for (var i = 1; i <= 8; i++)
+    Instrumento(
+      nombre: 'Instrumento de Viento $i',
+      fabricante: 'Selmer',
+      precio: 699.0 + i * 50,
+      imagenUrl: 'lib/assets/viento.jpg',
+      detalles: 'Instrumento de viento con timbre cálido y buena entonación.',
+      categoria: 'Viento',
+    ),
 ];
 
 final List<String> categorias = [

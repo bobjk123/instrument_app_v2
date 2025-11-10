@@ -51,17 +51,33 @@ class DetallesInstrumentoPage extends StatelessWidget {
                   child: Center(
                     child: Hero(
                       tag: 'instrument-${instrumento.nombre}',
-                      child: Image.network(
-                        instrumento.imagenUrl,
-                        fit: BoxFit.contain,
-                        errorBuilder: (context, error, stackTrace) => Icon(
-                          Icons.music_note_outlined,
-                          size: 150,
-                          color: theme.colorScheme.primary.withValues(
-                            alpha: 0.5,
-                          ),
-                        ),
-                      ),
+                      child:
+                          (instrumento.imagenUrl.startsWith('lib/') ||
+                              instrumento.imagenUrl.startsWith('assets/'))
+                          ? Image.asset(
+                              instrumento.imagenUrl,
+                              fit: BoxFit.contain,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Icon(
+                                    Icons.music_note_outlined,
+                                    size: 150,
+                                    color: theme.colorScheme.primary.withValues(
+                                      alpha: 0.5,
+                                    ),
+                                  ),
+                            )
+                          : Image.network(
+                              instrumento.imagenUrl,
+                              fit: BoxFit.contain,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Icon(
+                                    Icons.music_note_outlined,
+                                    size: 150,
+                                    color: theme.colorScheme.primary.withValues(
+                                      alpha: 0.5,
+                                    ),
+                                  ),
+                            ),
                     ),
                   ),
                 ),
@@ -76,54 +92,27 @@ class DetallesInstrumentoPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Fabricante: ${instrumento.fabricante}',
-                        style: theme.textTheme.titleMedium!.copyWith(
+                        'Detalles del Instrumento',
+                        style: theme.textTheme.titleLarge!.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: theme.colorScheme.primary,
                         ),
                       ),
-                      const SizedBox(height: 8),
-                      // Card de Detalles
-                      Container(
-                        padding: const EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.05),
-                              blurRadius: 10,
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Detalles del Instrumento',
-                              style: theme.textTheme.titleLarge!.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const Divider(height: 20, color: Colors.grey),
-                            Text(
-                              instrumento.detalles,
-                              style: theme.textTheme.bodyLarge,
-                            ),
-                            const SizedBox(height: 16),
-                            // Detalles técnicos simulados
-                            _buildDetailRow(
-                              'Categoría',
-                              instrumento.categoria,
-                              theme,
-                            ),
-                            _buildDetailRow(
-                              'Material',
-                              'Madera de Arce/Caoba',
-                              theme,
-                            ),
-                          ],
-                        ),
+                      const Divider(height: 20, color: Colors.grey),
+                      Text(
+                        instrumento.detalles,
+                        style: theme.textTheme.bodyLarge,
+                      ),
+                      const SizedBox(height: 16),
+                      // Detalles técnicos simulados
+                      _buildDetailRow(
+                        'Categoría',
+                        instrumento.categoria,
+                        theme,
+                      ),
+                      _buildDetailRow(
+                        'Material',
+                        'Madera de Arce/Caoba',
+                        theme,
                       ),
                     ],
                   ),
