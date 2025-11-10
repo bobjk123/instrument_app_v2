@@ -44,33 +44,43 @@ class InstrumentoTile extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            // Imagen del Producto
-            Expanded(
+            // Imagen del Producto (tamaño fijo para evitar que ocupe
+            // todo el espacio del tile y provoque un aspecto desproporcionado)
+            SizedBox(
+              height: 140,
               child: Center(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child:
                       (instrumento.imagenUrl.startsWith('lib/') ||
                           instrumento.imagenUrl.startsWith('assets/'))
-                      ? Image.asset(
-                          instrumento.imagenUrl,
-                          fit: BoxFit.contain,
-                          errorBuilder: (context, error, stackTrace) => Icon(
-                            Icons.music_note_outlined,
-                            size: 60,
-                            color: theme.colorScheme.primary.withValues(
-                              alpha: 0.5,
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Image.asset(
+                            instrumento.imagenUrl,
+                            fit: BoxFit.contain,
+                            width: double.infinity,
+                            errorBuilder: (context, error, stackTrace) => Icon(
+                              Icons.music_note_outlined,
+                              size: 60,
+                              color: theme.colorScheme.primary.withValues(
+                                alpha: 0.5,
+                              ),
                             ),
                           ),
                         )
-                      : Image.network(
-                          instrumento.imagenUrl,
-                          fit: BoxFit.contain,
-                          errorBuilder: (context, error, stackTrace) => Icon(
-                            Icons.music_note_outlined,
-                            size: 60,
-                            color: theme.colorScheme.primary.withValues(
-                              alpha: 0.5,
+                      : ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Image.network(
+                            instrumento.imagenUrl,
+                            fit: BoxFit.contain,
+                            width: double.infinity,
+                            errorBuilder: (context, error, stackTrace) => Icon(
+                              Icons.music_note_outlined,
+                              size: 60,
+                              color: theme.colorScheme.primary.withValues(
+                                alpha: 0.5,
+                              ),
                             ),
                           ),
                         ),

@@ -1,12 +1,68 @@
 import 'package:flutter/material.dart';
+import '../utils/snackbar_helper.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
-  // Simulación de validación de credenciales
-  void _login(BuildContext context) {
-    // Por simplicidad, navegamos directamente al catálogo.
-    Navigator.of(context).pushReplacementNamed('/catalog');
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  bool _loading = false;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _simulateLogin() async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    setState(() {
+      _loading = true;
+    });
+
+    // Simulamos una llamada de red
+    await Future.delayed(const Duration(milliseconds: 800));
+
+    if (!mounted) return;
+
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+
+    // Validación simple: email contiene '@' y password >= 6
+    final bool ok =
+        RegExp(r"^[^@\s]+@[^@\s]+\.[^@\s]+$").hasMatch(email) &&
+        password.length >= 6;
+
+    setState(() {
+      _loading = false;
+    });
+
+    final theme = Theme.of(context);
+
+    if (ok) {
+      showFloatingSnackBar(
+        context,
+        'Bienvenido, $email',
+        backgroundColor: theme.colorScheme.primary,
+      );
+      Navigator.of(context).pushReplacementNamed('/catalog');
+    } else {
+      showFloatingSnackBar(
+        context,
+        'Email o contraseña inválidos',
+        backgroundColor: Colors.redAccent,
+      );
+    }
   }
 
   @override
@@ -15,7 +71,6 @@ class LoginPage extends StatelessWidget {
     final mediaQuery = MediaQuery.of(context);
     final isLargeScreen = mediaQuery.size.width > 600;
 
-    // Define un ancho máximo para la columna de login en pantallas grandes.
     final double maxWidth = isLargeScreen ? 400.0 : double.infinity;
 
     return Scaffold(
@@ -24,66 +79,97 @@ class LoginPage extends StatelessWidget {
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(32.0),
           child: ConstrainedBox(
-            // Limita el ancho del contenido
             constraints: BoxConstraints(maxWidth: maxWidth),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                // Icono de la App
-                Icon(
-                  Icons.music_note_rounded,
-                  size: 90,
-                  color: theme.colorScheme.primary,
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  'Music Store D2C',
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.headlineMedium!.copyWith(
-                    fontWeight: FontWeight.bold,
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Icon(
+                    Icons.music_note_rounded,
+                    size: 90,
                     color: theme.colorScheme.primary,
                   ),
-                ),
-                const SizedBox(height: 48),
-
-                // Campo de Email
-                _buildTextField(
-                  label: 'Email',
-                  icon: Icons.person_outline,
-                  keyboardType: TextInputType.emailAddress,
-                ),
-                const SizedBox(height: 20),
-
-                // Campo de Contraseña
-                _buildTextField(
-                  label: 'Contraseña',
-                  icon: Icons.lock_outline,
-                  obscureText: true,
-                ),
-                const SizedBox(height: 30),
-
-                // Botón de Inicio de Sesión
-                ElevatedButton(
-                  onPressed: () => _login(context),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: theme.colorScheme.secondary,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    elevation: 5,
-                  ),
-                  child: Text(
-                    'Iniciar Sesión',
-                    style: theme.textTheme.titleLarge!.copyWith(
+                  const SizedBox(height: 16),
+                  Text(
+                    'Music Store D2C',
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.headlineMedium!.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: theme.colorScheme.primary,
                     ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 48),
+
+                  _buildTextField(
+                    controller: _emailController,
+                    label: 'Email',
+                    icon: Icons.person_outline,
+                    keyboardType: TextInputType.emailAddress,
+                    validator: (v) {
+                      if (v == null || v.trim().isEmpty) {
+                        return 'Ingresa un email';
+                      }
+                      if (!RegExp(
+                        r"^[^@\s]+@[^@\s]+\.[^@\s]+$",
+                      ).hasMatch(v.trim())) {
+                        return 'Email no válido';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 20),
+
+                  _buildTextField(
+                    controller: _passwordController,
+                    label: 'Contraseña',
+                    icon: Icons.lock_outline,
+                    obscureText: true,
+                    validator: (v) {
+                      if (v == null || v.isEmpty) {
+                        return 'Ingresa la contraseña';
+                      }
+                      if (v.length < 6) {
+                        return 'La contraseña debe tener al menos 6 caracteres';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 30),
+
+                  ElevatedButton(
+                    onPressed: _loading ? null : _simulateLogin,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: theme.colorScheme.secondary,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      elevation: 5,
+                    ),
+                    child: _loading
+                        ? SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.white,
+                              ),
+                            ),
+                          )
+                        : Text(
+                            'Iniciar Sesión',
+                            style: theme.textTheme.titleLarge!.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -92,10 +178,12 @@ class LoginPage extends StatelessWidget {
   }
 
   Widget _buildTextField({
+    required TextEditingController controller,
     required String label,
     required IconData icon,
     bool obscureText = false,
     TextInputType keyboardType = TextInputType.text,
+    String? Function(String?)? validator,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -109,9 +197,11 @@ class LoginPage extends StatelessWidget {
           ),
         ],
       ),
-      child: TextField(
+      child: TextFormField(
+        controller: controller,
         keyboardType: keyboardType,
         obscureText: obscureText,
+        validator: validator,
         decoration: InputDecoration(
           labelText: label,
           labelStyle: const TextStyle(color: Colors.grey),

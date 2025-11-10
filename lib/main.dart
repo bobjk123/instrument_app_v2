@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'screens/login_page.dart';
 import 'screens/main_catalog_screen.dart';
@@ -19,6 +20,18 @@ class MyApp extends StatelessWidget {
       0xFF6C63FF,
     ); // Púrpura/Índigo para el acento
     const Color accentColor = Color(0xFFEE8795); // Rosa Suave para botones
+
+    // Alineamos el color de la barra de navegación del sistema con el fondo
+    // de la app para evitar una franja blanca en la parte inferior en Android.
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        systemNavigationBarColor: const Color(0xFFF5F5F5),
+        systemNavigationBarIconBrightness: Brightness.dark,
+        systemNavigationBarDividerColor: Colors.transparent,
+        systemStatusBarContrastEnforced: false,
+        systemNavigationBarContrastEnforced: false,
+      ),
+    );
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,

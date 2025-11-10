@@ -138,6 +138,7 @@ class _MainCatalogScreenState extends State<MainCatalogScreen> {
     return DefaultTabController(
       length: categorias.length,
       child: Scaffold(
+        extendBody: true,
         backgroundColor: theme.colorScheme.surface,
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -167,7 +168,7 @@ class _MainCatalogScreenState extends State<MainCatalogScreen> {
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(
               (() {
-                const double baseHeight = 72;
+                const double baseHeight = 100;
                 // ignore: deprecated_member_use
                 final double ts = MediaQuery.of(context).textScaleFactor;
                 // Limitamos el escalado a un máximo razonable para evitar alturas excesivas
@@ -177,7 +178,7 @@ class _MainCatalogScreenState extends State<MainCatalogScreen> {
             ),
             child: Builder(
               builder: (context) {
-                final double baseHeight = 72;
+                final double baseHeight = 100;
                 // ignore: deprecated_member_use
                 final double ts = MediaQuery.of(context).textScaleFactor;
                 final double scale = ts.clamp(1.0, 2.0);
@@ -217,7 +218,7 @@ class _MainCatalogScreenState extends State<MainCatalogScreen> {
             // Contenido principal (TabBarView)
             Padding(
               padding: const EdgeInsets.only(
-                bottom: 80.0,
+                bottom: 100.0,
               ), // Espacio para la barra de resumen
               child: TabBarView(
                 children: categorias.map((categoria) {
